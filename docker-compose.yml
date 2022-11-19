@@ -1,0 +1,86 @@
+version: '3.5'
+
+x-services-volume:
+  &backend-volume
+  type: bind
+  source: ./backend
+  target: /backend
+ 
+services:
+    # mysql 8.0
+    mydb:
+        # image name
+        image: mysql:8.0
+        # Password and user name of mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_USER: 'WERfgcvh34546'
+            MYSQL_PASS: 'WERfgcvh34546'
+        # Which port should be exposed
+        ports:
+            - 3306:3306
+        container_name: mydb
+        volumes:
+            # Save the data in named "Volumes" of Docker
+            - db-store:/var/lib/mysql
+            # Or use the local file
+            # - ./docker_db_data/mysql:/var/lib/mysql
+            # Where to save the mysql's log
+            - ./logs:/var/log/mysql:z
+            # Where to load the my.cnf
+            - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:z
+        # Which network this container belongs to.
+        networks:
+            - app_net
+    # The container of Backend
+    backend:
+        build:
+            # Wnere to find the "Dockerfile".
+            context: .
+            dockerfile: docker/backend/Dockerfile
+        working_dir: /backend
+        volumes:
+            # Where the source code should be saved.
+            - <<: *backend-volume
+            # Where the bash file is (which is executed for the build)
+            - ./docker/backend/.env.backup:/.env.backup:z
+            # Where to save backend's log files
+            - ./logs:/var/log/php
+            # Where to load php.ini.
+            - ./docker/backend/php.ini:/usr/local/etc/php/php.ini
+        # Wait until mydb container is ready.
+        depends_on:
+            - mydb
+        container_name: backend
+        # Which network this container belongs to.
+        networks:
+            - app_net
+    # nginx 1.17
+    nginx:
+        # image name
+        image: nginx:1.17-alpine
+        # Wait until "backend" container is ready
+        depends_on:
+        - backend
+        # Which port should be exposed
+        ports:
+        - 8080:8080
+        - 443:443
+        volumes:
+        # Where to find the files to serve
+        - *backend-volume
+        # Where to save nginx logs.
+        - ./logs:/var/log/nginx
+        # Where to load default.conf.
+        - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        - ./certs:/etc/nginx/certs
+        container_name: nginx
+        # Which network this container belongs to.
+        networks:
+            - app_net
+networks:
+    # Containers in same network can access each other by using its container name as host name
+    app_net:
+        driver: "bridge"
+volumes:
+    db-store:
