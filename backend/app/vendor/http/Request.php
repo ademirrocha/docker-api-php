@@ -16,11 +16,16 @@ class Request
 
         //Get parameters from query
         $url_components = parse_url($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-        parse_str($url_components['query'], $this->query_params);
+        if(isset($url_components['query'])){
+            parse_str($url_components['query'], $this->query_params);
+        }
     }
 
     public function all(){
-        return (object) array_merge($this->query_params, (array) $this->body_params);
+        if($this->query_params){
+            return (object) array_merge($this->query_params, (array) $this->body_params);
+        }
+        return  $this->body_params;
     }
 
 }

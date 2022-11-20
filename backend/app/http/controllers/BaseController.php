@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers;
+namespace app\http\controllers;
 
 use app\vendor\http\Request;
 

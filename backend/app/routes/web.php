@@ -1,6 +1,6 @@
 <?php
 
-use app\controllers\LoginController;
+use app\http\controllers\LoginController;
 use app\vendor\routes\Route;
 use app\views\View;
 

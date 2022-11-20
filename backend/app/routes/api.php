@@ -1,6 +1,6 @@
 <?php
 
-use app\controllers\UserController;
+use app\http\controllers\UserController;
 use app\vendor\routes\api\Route;
 
 /**
