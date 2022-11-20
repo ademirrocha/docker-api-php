@@ -10,20 +10,19 @@ class UserController extends BaseController
 
     public static function create(){
         $params = self::request()->all();
-
-        $validate = new CreateRequest($params);
-        $validator = $validate->validator();
-        if(count($validator) > 0){
-            return Response::json($validator, 422);
+        $validate = self::validate(new CreateRequest($params));
+        if($validate === true){
+            return Response::json([
+                'user' => [
+                    'id' => 1,
+                    'username' => $params->username,
+                    'email' => $params->email,
+                    'github' => $params->github,
+                ]
+            ], 201);
         }
-        return Response::json([
-            'user' => [
-                'id' => 1,
-                'username' => $params->username,
-                'email' => $params->email,
-                'github' => $params->github,
-            ]
-        ], 201);
+
+        return $validate;
     }
 
 }

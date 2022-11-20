@@ -2,12 +2,22 @@
 
 namespace app\vendor\http\validator;
 
+
 class FormValidator
 {
 
     protected $parameters;
     protected $responseMessages = [];
-    protected $isValid = true;
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -26,6 +36,7 @@ class FormValidator
     }
 
     public function validator(){
+
         $rules = $this->rules();
         foreach ($rules as $field => $rule){
             if(is_array($rule)){
@@ -37,6 +48,7 @@ class FormValidator
             }
         }
         return $this->responseMessages;
+
     }
 
 
@@ -57,7 +69,6 @@ class FormValidator
         }
 
         if(!$isValid){
-            $this->isValid = false;
             $this->addMessage($attribute, $rule);
         }
 
