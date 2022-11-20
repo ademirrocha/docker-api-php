@@ -1,9 +1,6 @@
 <?php
 
-// set autoload
-spl_autoload_register(function ($class) {
-    require_once(str_replace('\\', '/', '../' . $class . '.php'));
-});
+include "../index.php";
 
 use app\vendor\routes\Route;
 use app\vendor\routes\api\Route as RouteApi;

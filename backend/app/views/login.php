@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var $params object
+ */
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,7 +16,8 @@
     </head>
     <body>
         <h1>Este é o login</h1>
-        <?php if(isset($_GET['email'])) echo ("EMAIL: " . $_GET['email']); ?>
+        <?php if(isset($params->email)) echo ("EMAIL: " . $params->email); ?>
+
         <br>
         <a href="/">Pagina inicial</a>
         <script src="" async defer></script>
