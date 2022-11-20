@@ -3,6 +3,7 @@
 namespace app\http\controllers;
 
 use app\http\requests\users\CreateRequest;
+use app\vendor\databases\DB;
 use app\vendor\http\Response;
 
 class UserController extends BaseController
@@ -23,6 +24,14 @@ class UserController extends BaseController
         }
 
         return $validate;
+    }
+
+    public static function index(){
+        $pdo = DB::connect();
+        $stmt = $pdo->query("SELECT * FROM teste ORDER BY id DESC");
+        $user = $stmt->fetchAll();
+        $pdo = DB::close();
+        return Response::json($user);
     }
 
 }

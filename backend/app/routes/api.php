@@ -14,3 +14,8 @@ Route::post('/user/create', function(){
     UserController::create();
 });
 
+// route for www.example.com/join
+Route::get('/users', function(){
+    UserController::index();
+});
+

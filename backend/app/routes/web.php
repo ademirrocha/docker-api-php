@@ -32,5 +32,3 @@ Route::resource('/notFound', function(){
     new View('notFound');
 });
 
-//method for execution routes
-//Route::submit();
