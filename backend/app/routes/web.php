@@ -1,6 +1,6 @@
 <?php
 
-use app\vendor\Route;
+use app\vendor\routes\Route;
 use app\views\View;
 
 /**
@@ -19,7 +19,6 @@ Route::get('/', function(){
 Route::get('/join', function(){
     new View('join');
 });
-
 
 Route::get('/login', function(){
     new View('login');
@@ -42,5 +41,5 @@ Route::get('/notFound', function(){
     new View('notFound');
 });
 
-//method for execution routes    
-Route::submit();
+//method for execution routes
+//Route::submit();

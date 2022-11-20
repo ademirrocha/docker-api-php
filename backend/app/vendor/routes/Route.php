@@ -1,10 +1,10 @@
 <?php
 
-namespace app\vendor;
+namespace app\vendor\routes;
 
 /**
- * @author      Jesse Boyer <contact@jream.com>
- * @copyright   Copyright (C), 2011-12 Jesse Boyer
+ * @author      JAdemir Rocha Ferreira <tiademir.rocga93@gmail.com>
+ * @copyright   Copyright (C), 2022 Ademir Rocha Ferreira
  * @license     GNU General Public License 3 (http://www.gnu.org/licenses/)
  *              Refer to the LICENSE file distributed within the package.
  *
@@ -18,20 +18,20 @@ class Route
     /**
     * @var array $_listUri List of URI's to match against
     */
-    private static $_listUri = array();
+    protected static $_listUri = array();
 
 
-    private static $error_method = false;
+    protected static $error_method = false;
 
     /**
     * @var array $_listCall List of closures to call 
     */
-    private static $_listCall = array();
+    protected static $_listCall = array();
 
     /**
     * @var string $_trim Class-wide items to clean
     */
-    private static $_trim = '/\^$';
+    protected static $_trim = '/\^$';
 
     /**
     * get - Adds a URI and Function to the two lists for Requests GET
