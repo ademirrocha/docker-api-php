@@ -28,7 +28,7 @@ Route::get('/users/user', function(){
     new View('user');
 });
 
-Route::get('/notFound', function(){
+Route::resource('/notFound', function(){
     new View('notFound');
 });
 

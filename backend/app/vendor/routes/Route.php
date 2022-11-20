@@ -42,9 +42,7 @@ class Route
     static public function get($uri, $function)
     {
         if($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $uri = trim($uri, self::$_trim);
-            self::$_listUri[] = $uri;
-            self::$_listCall[] = $function;
+            self::resource($uri, $function);
         } else if($_SERVER['REQUEST_URI'] === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request GET Only';
@@ -61,9 +59,7 @@ class Route
     static public function post($uri, $function)
     {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $uri = trim($uri, self::$_trim);
-            self::$_listUri[] = $uri;
-            self::$_listCall[] = $function;
+            self::resource($uri, $function);
         } else if($_SERVER['REQUEST_URI'] === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request POST Only';
@@ -80,9 +76,7 @@ class Route
     static public function put($uri, $function)
     {
         if($_SERVER['REQUEST_METHOD'] === 'PUT'){
-            $uri = trim($uri, self::$_trim);
-            self::$_listUri[] = $uri;
-            self::$_listCall[] = $function;
+            self::resource($uri, $function);
         } else if($_SERVER['REQUEST_URI'] === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request POST Only';
@@ -99,14 +93,25 @@ class Route
     static public function delete($uri, $function)
     {
         if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
-            $uri = trim($uri, self::$_trim);
-            self::$_listUri[] = $uri;
-            self::$_listCall[] = $function;
+            self::resource($uri, $function);
         } else if($_SERVER['REQUEST_URI'] === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request DELETE Only';
         }
 
+    }
+
+    /**
+     * resource - Adds a URI and Function to the two lists for all requests
+     *
+     * @param string $uri A path such as about/system
+     * @param object $function An anonymous function
+     */
+    static public function resource($uri, $function)
+    {
+        $uri = trim($uri, self::$_trim);
+        self::$_listUri[] = $uri;
+        self::$_listCall[] = $function;
     }
 
     /**
