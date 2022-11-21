@@ -43,7 +43,7 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'GET') {
             self::resource($uri, $function);
-        } else if($_SERVER['REQUEST_URI'] === $uri) {
+        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request GET Only';
         }
@@ -60,7 +60,7 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             self::resource($uri, $function);
-        } else if($_SERVER['REQUEST_URI'] === $uri) {
+        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request POST Only';
         }
@@ -77,7 +77,7 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'PUT'){
             self::resource($uri, $function);
-        } else if($_SERVER['REQUEST_URI'] === $uri) {
+        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request POST Only';
         }
@@ -94,7 +94,7 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
             self::resource($uri, $function);
-        } else if($_SERVER['REQUEST_URI'] === $uri) {
+        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request DELETE Only';
         }
@@ -109,7 +109,7 @@ class Route
      */
     static public function resource($uri, $function)
     {
-        $uri = trim($uri, self::$_trim);
+        $uri = rtrim(trim($uri, self::$_trim), '/');
         self::$_listUri[] = $uri;
         self::$_listCall[] = $function;
     }
@@ -122,7 +122,7 @@ class Route
         $uri = isset($_SERVER['REQUEST_URI']) ? explode('?', $_SERVER['REQUEST_URI'])[0] : '/';
         //var_dump($_SERVER);
 
-        $uri = trim($uri, self::$_trim);
+        $uri = rtrim(trim($uri, self::$_trim), '/');
         
         if(!self::$error_method && !in_array($uri, self::$_listUri)){
             $uri = 'notFound';

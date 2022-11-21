@@ -1,6 +1,5 @@
 <?php
 
-use app\http\controllers\UserController;
 use app\vendor\routes\api\Route;
 
 /**
@@ -10,12 +9,12 @@ use app\vendor\routes\api\Route;
  */
 
 // route for www.example.com/join
-Route::post('/user/create', function(){
-    UserController::create();
+Route::post('/users/create', function(){
+    call_user_func("app\http\controllers\UserController::create");
 });
 
 // route for www.example.com/join
 Route::get('/users', function(){
-    UserController::index();
+    call_user_func("app\http\controllers\UserController::index");
 });
 

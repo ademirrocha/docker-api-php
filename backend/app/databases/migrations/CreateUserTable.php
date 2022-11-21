@@ -17,8 +17,10 @@ class CreateUserTable extends Migrate
     {
         $table = new Table('users');
         $table->create([
-            'id' => ['uuid'],
-            'nome' => ['string', 'size' => '33']
+            'id' => ['primaryKey'],
+            'name' => ['string'],
+            'email' => ['string', 'unique', 'size' => 60],
+            'github' => ['string', 'size' => 60]
         ]);
     }
 
@@ -29,7 +31,8 @@ class CreateUserTable extends Migrate
      */
     public function down()
     {
-        Table::dropIfExists('tags');
+        $table = new Table('users');
+        $table->dropIfExists('users');
     }
 
 

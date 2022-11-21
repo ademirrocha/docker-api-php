@@ -35,7 +35,7 @@ class Migrate
     }
 
     private function lastVersion(){
-        $stmt = $this->db->pdo->query("SELECT version FROM migrations MAX version limit 1");
+        $stmt = $this->db->pdo->query("SELECT version FROM migrations ORDER BY version DESC limit 1");
         if($stmt){
             return (object) $stmt->fetch();
         }
@@ -56,6 +56,7 @@ class Migrate
         $files = scandir($dir, 1);
         $lastVersion = self::lastVersion();
         $lastVersion =  $lastVersion ? $lastVersion->version : 0;
+
         foreach ($files as $file){
             try {
                 if ($file != '.' && $file != '..') {

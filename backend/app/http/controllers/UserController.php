@@ -3,8 +3,7 @@
 namespace app\http\controllers;
 
 use app\http\requests\users\CreateRequest;
-use app\vendor\databases\DB;
-use app\vendor\databases\QueryBuilder;
+use app\models\user\User;
 use app\vendor\http\Response;
 
 class UserController extends BaseController
@@ -14,13 +13,16 @@ class UserController extends BaseController
         $params = self::request()->all();
         $validate = self::validate(new CreateRequest($params));
         if($validate === true){
+            $user = new User();
+
+            $user = $user->create([
+                'name' => $params->name,
+                'email' => $params->email,
+                'github' => $params->github,
+            ]);
+
             return Response::json([
-                'user' => [
-                    'id' => 1,
-                    'username' => $params->username,
-                    'email' => $params->email,
-                    'github' => $params->github,
-                ]
+                'user' => $user
             ], 201);
         }
 
@@ -28,9 +30,9 @@ class UserController extends BaseController
     }
 
     public static function index(){
-        $query = new QueryBuilder('teste');
+        $query = new User();
         $user = $query->where(['name' => 'TY', 'age' => 23])->orWhere(['name' => 'Oliver', 'age' => 25])->orWhere(['name' => 'Roberta', 'age' => 39])->get();
-        $query = new QueryBuilder('teste');
+        $query = new User();
         $all = $query->get();
         return Response::json(['filter' => $user, 'all' => $all]);
     }

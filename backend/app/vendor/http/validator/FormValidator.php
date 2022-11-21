@@ -62,9 +62,14 @@ class FormValidator
                 $isValid = UrlValidator::isValidate($attribute, $this->parameters);
             } else if($rule === 'string'){
                 $isValid = StringValidator::isValidate($attribute, $this->parameters);
-            }
-            else if($rule === 'email'){
+            } else if($rule === 'email'){
                 $isValid = EmailValidator::isValidate($attribute, $this->parameters);
+            } else if(count(explode('unique:', $rule)) > 1){
+                $value = explode(':', $rule)[1];
+                $options = explode('|', $value);
+                $table = $options[0];
+                $oldAttr = $options[1];
+                $isValid = UniqueValidator::isValidate($attribute, $this->parameters, $table, $oldAttr);
             }
         }
 

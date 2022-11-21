@@ -26,6 +26,8 @@ class Table
 
         $query = "CREATE TABLE `$this->tableName` ( \n";
         $primaryKey = null;
+        $hasUniqueKey = false;
+        $uniqueKeyQuery = '';
 
         foreach ($columns as $key => $column){
             $query .= "`$key` ";
@@ -44,14 +46,26 @@ class Table
                     $query .= self::integer($column);
                     $query .= self::defaultValue($column);
                     $query .= self::nullable($column);
+                } else if($attr === 'unique') {
+                    $hasUniqueKey = true;
+                    if($uniqueKeyQuery != ''){
+                        $uniqueKeyQuery .= ",\n";
+                    }
+                    $uniqueKeyQuery .= "UNIQUE KEY `$key` (`$key`)";
                 }
             }
-            $query .= ",\n";
+            $query .=  $primaryKey ? ",\n" : "\n";
         }
 
         if($primaryKey){
-            $query .= "PRIMARY KEY (`" . $primaryKey . "`)\n";
+            $query .= "PRIMARY KEY (`" . $primaryKey . "`)";
+            $query .=  $hasUniqueKey ? ",\n" : "\n";
         }
+
+        if($hasUniqueKey){
+            $query .=  $uniqueKeyQuery . "\n";
+        }
+
         $query .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;\n";
         var_dump($query);
         $stmt = $this->db->pdo->query($query);
@@ -60,20 +74,24 @@ class Table
         return $stmt;
     }
 
-    public static function dropIfExists($table){
-        print_r($table);
+    public function dropIfExists(){
+        $query = "DROP IF EXISTS TABLE `$this->tableName`;";
+        var_dump($query);
+        $stmt = $this->db->pdo->query($query);
+        $stmt->execute();
+
     }
 
 
-    private static function primaryKey(){
+    private function primaryKey(){
         return 'bigint unsigned NOT NULL AUTO_INCREMENT ';
     }
 
-    private static function primaryKeyUiid(){
+    private function primaryKeyUiid(){
         return 'VARCHAR (64) NOT NULL UNIQUE ';
     }
 
-    private static function string($column){
+    private function string($column){
 
         $varchar = 'VARCHAR ';
         if(isset($column['size'])){
@@ -84,7 +102,7 @@ class Table
         return $varchar;
     }
 
-    private static function integer($column){
+    private function integer($column){
 
         $varchar = 'INT ';
         if(isset($column['size'])){
@@ -95,7 +113,7 @@ class Table
         return $varchar;
     }
 
-    private static function defaultValue($column){
+    private function defaultValue($column){
         if(isset($column['default'])){
             return 'DEFAULT ' . $column['default'];
         } else if(isset($column['nullable'])){
@@ -104,7 +122,7 @@ class Table
         return ' ';
     }
 
-    private static function nullable($column){
+    private function nullable($column){
         return isset($column['nullable']) ? ' ' : 'NOT NULL ';
     }
 

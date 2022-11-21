@@ -14,6 +14,12 @@ class QueryBuilder
     protected string $tableName;
 
     /**
+     * PRIMARY KEY Column
+     * @var $primaryKey string
+     */
+    protected $primaryKey = 'id';
+
+    /**
      * For SELECT query
      * @var $selectQuery string
      */
@@ -48,6 +54,13 @@ class QueryBuilder
      * @var $maxQuery string
      */
     protected $maxQuery;
+
+
+    /**
+     * For order query result
+     * @var $orderByQuery string
+     */
+    protected $orderByQuery;
 
     /**
      * For limit result
@@ -95,6 +108,36 @@ class QueryBuilder
                 }
             }
         }
+    }
+
+    /**
+     * @param $field
+     * @param  $value
+     * @return $this
+     */
+    public function not( $field, $value = null): self
+    {
+        $this->whereQuery =  $this->whereQuery ?? 'WHERE ';
+        if(is_array($field)){
+            $this->whereQuery .= '( ';
+            $i = 0;
+            foreach ($field as $key => $item){
+                $this->whereQuery .= $i > 0 ? 'AND ' : '';
+                $this->not($key, $item);
+                $i++;
+            }
+            $this->whereQuery .= ') ';
+        }else{
+
+            $fieldBind = $this->getFieldBind();
+            $this->bindValues[] = [$fieldBind, $value];
+            if(! strpos(substr($this->whereQuery, -3), '(')){
+                $this->whereQuery .= 'AND ';
+            }
+            $this->whereQuery .= "`$field` != " . $fieldBind . ' ';
+        }
+
+        return $this;
     }
 
     /**
@@ -225,19 +268,38 @@ class QueryBuilder
      * @return void
      */
     public function limit(int $value){
-        $this->maxQuery = "MAX $value ";
+        $this->maxQuery = "LIMIT $value ";
+    }
+
+    /**
+     * @param string $field
+     * @return void
+     */
+    public function orderBy(string $field){
+        $this->orderByQuery = $this->orderByQuery ?? "ORDER BY ";
+        $this->orderByQuery .= $field . ' ';
+    }
+
+    /**
+     * @param string $field
+     * @return void
+     */
+    public function orderByDesc(string $field){
+        $this->orderByQuery = $this->orderByQuery ?? "ORDER BY ";
+        $this->orderByQuery .= $field . ' DESC ';
     }
 
     private function makeSharedQuery(){
         $this->query .= $this->whereQuery ?? '';
         $this->query .= $this->andWhereQuery ?? '';
         $this->query .= $this->orWhereQuery ?? '';
+        $this->query .= $this->orderByQuery ?? '';
         $this->query .= $this->maxQuery ?? '';
         $this->query .= $this->limitQuery ?? '';
         $this->query .= ';';
     }
 
-    private function executeQyery(){
+    private function executeQuery(){
         $stmt = $this->db->pdo->prepare($this->query);
         foreach ($this->bindValues as  $value) {
             $stmt->bindValue($value[0], $value[1]);
@@ -255,11 +317,40 @@ class QueryBuilder
         $this->query .= $this->selectQuery . 'FROM ' . $this->tableName . ' ';
         $this->makeSharedQuery();
 
-        $stmt = $this->executeQyery();
+        $stmt = $this->executeQuery();
         if($stmt){
             return $stmt->fetchAll();
         }
         return [];
+    }
+
+    public function last(){
+        $this->orderByDesc($this->primaryKey);
+        $this->limit(1);
+        $data = $this->get();
+        if(count($data) > 0){
+            return current($data);
+        }
+        return null;
+    }
+
+    public function first(){
+        $this->orderBy($this->primaryKey);
+        $this->limit(1);
+        $data = $this->get();
+        if(count($data) > 0){
+            return current($data);
+        }
+        return null;
+    }
+
+    public function exists(){
+        $this->limit(1);
+        $data = $this->get();
+        if(count($data) > 0){
+            return true;
+        }
+        return false;
     }
 
     public function sql(): string
@@ -275,7 +366,7 @@ class QueryBuilder
     }
 
 
-    public function insert($values){
+    public function insert($values, $lastCondition = null){
 
         if(count($values) > 0){
             $this->query = "INSERT INTO `$this->tableName` \n (";
@@ -305,7 +396,17 @@ class QueryBuilder
                     $this->query .= ",\n";
                 }
             }
-            return $this->executeQyery();
+            $execute = $this->executeQuery();
+            if($execute){
+                $this->query = null;
+                $this->bindValues = [];
+                $this->select();
+                if($lastCondition){
+                    $this->where($lastCondition);
+                }
+
+                return $this->last();
+            }
         }
         return  false;
     }

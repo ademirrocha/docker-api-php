@@ -29,8 +29,8 @@ class CreateRequest extends FormValidator
     public function rules()
     {
         return [
-            'username' => ['required', 'string'],
-            'email' => ['required', 'email'],
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email', 'unique:users|id'],
             'github' => ['required', 'url']
         ];
     }
@@ -38,10 +38,11 @@ class CreateRequest extends FormValidator
     public function messages()
     {
         return [
-            'username.required' => 'O Username é obrigatório',
-            'username.string' => 'O Username deve ser uma string',
+            'name.required' => 'O Nome é obrigatório',
+            'name.string' => 'O Nome deve ser uma string',
             'email.required' => 'O E-mail é obrigatório',
             'email.email' => 'O E-mail não é válido!',
+            'email.unique:users|id' => 'Este E-mail já está em uso',
             'github.required' => 'O Github é obrigatório',
             'github.url' => 'O Github deve ser uma url',
         ];
