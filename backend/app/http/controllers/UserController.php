@@ -4,6 +4,7 @@ namespace app\http\controllers;
 
 use app\http\requests\users\CreateRequest;
 use app\vendor\databases\DB;
+use app\vendor\databases\QueryBuilder;
 use app\vendor\http\Response;
 
 class UserController extends BaseController
@@ -27,11 +28,11 @@ class UserController extends BaseController
     }
 
     public static function index(){
-        $pdo = DB::connect();
-        $stmt = $pdo->query("SELECT * FROM teste ORDER BY id DESC");
-        $user = $stmt->fetchAll();
-        $pdo = DB::close();
-        return Response::json($user);
+        $query = new QueryBuilder('teste');
+        $user = $query->where(['name' => 'TY', 'age' => 23])->orWhere(['name' => 'Oliver', 'age' => 25])->orWhere(['name' => 'Roberta', 'age' => 39])->get();
+        $query = new QueryBuilder('teste');
+        $all = $query->get();
+        return Response::json(['filter' => $user, 'all' => $all]);
     }
 
 }

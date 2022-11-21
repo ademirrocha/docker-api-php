@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+
+// set autoload
+use app\vendor\databases\migrations\Migrate;
+
+spl_autoload_register(function ($class) {
+    require_once(str_replace('\\', '/', $class . '.php'));
+});
+
+include 'app-config.php';
+
+
+function migrate(){
+    $migrate = new Migrate();
+    $migrate->execUp();
+    return true;
+}
+
+function arguments($argv) {
+
+    if($argv[1] === 'migrate'){
+        migrate();
+    }
+    print_r("\n");
+    return true;
+}
+
+var_dump(arguments($argv));
+
+exit(true);
+
+
+
+
