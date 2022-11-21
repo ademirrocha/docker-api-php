@@ -29,6 +29,7 @@ class Table
         $hasUniqueKey = false;
         $uniqueKeyQuery = '';
 
+        $i=0;
         foreach ($columns as $key => $column){
             $query .= "`$key` ";
             foreach ($column as $attr){
@@ -42,7 +43,7 @@ class Table
                     $query .= self::string($column);
                     $query .= self::defaultValue($column);
                     $query .= self::nullable($column);
-                } else if($attr === 'integer'){
+                } else if($attr === 'integer' || $attr === 'int'){
                     $query .= self::integer($column);
                     $query .= self::defaultValue($column);
                     $query .= self::nullable($column);
@@ -54,7 +55,12 @@ class Table
                     $uniqueKeyQuery .= "UNIQUE KEY `$key` (`$key`)";
                 }
             }
-            $query .=  $primaryKey ? ",\n" : "\n";
+            $i++;
+            if(!$primaryKey && !$hasUniqueKey && $i < count($columns)){
+                $query .= ",\n";
+            } else {
+                $query .= "\n";
+            }
         }
 
         if($primaryKey){

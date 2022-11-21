@@ -5,7 +5,7 @@ namespace app\databases\migrations;
 use app\vendor\databases\migrations\Migrate;
 use app\vendor\databases\Table;
 
-class CreateUserTable extends Migrate
+class CreateInmetroPortariaTable extends Migrate
 {
 
     /**
@@ -15,12 +15,12 @@ class CreateUserTable extends Migrate
      */
     public function up()
     {
-        $table = new Table('users');
+        $table = new Table('inmetr_portarias');
         $table->create([
-            'id' => ['primaryKey'],
-            'name' => ['string'],
-            'email' => ['string', 'unique', 'size' => 60],
-            'github' => ['string', 'size' => 60]
+            'DocumentoLegal' => ['string'],
+            'DataPublicacaoDOU' => ['string'],
+            'IDEscopo' => ['int'],
+            'DataVigenciaFabricacao' => ['string'],
         ]);
     }
 
@@ -31,7 +31,7 @@ class CreateUserTable extends Migrate
      */
     public function down()
     {
-        $table = new Table('users');
+        $table = new Table('inmetr_portarias');
         $table->dropIfExists();
     }
 
