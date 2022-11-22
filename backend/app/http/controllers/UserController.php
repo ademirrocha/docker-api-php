@@ -4,9 +4,10 @@ namespace app\http\controllers;
 
 use app\http\requests\users\CreateRequest;
 use app\models\user\User;
+use app\vendor\http\controllers\Controller;
 use app\vendor\http\Response;
 
-class UserController extends BaseController
+class UserController extends Controller
 {
 
     public static function create(){

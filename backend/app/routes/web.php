@@ -1,8 +1,8 @@
 <?php
 
-use app\http\controllers\LoginController;
+use app\vendor\http\controllers\Controller;
 use app\vendor\routes\Route;
-use app\views\View;
+use app\vendor\views\View;
 
 /**
  * -----------------------------------------------
@@ -12,23 +12,22 @@ use app\views\View;
 
 //define your route. This is main page route. for example www.example.com
 Route::get('/', function(){
-   new View('myindex');
+    View::call();
 });
 
-
 Route::post('/login', function(){
-    LoginController::login();
+    Controller::call('LoginController', 'login');
 });
 
 Route::post('/logout', function(){
-    new View('logout');
+    View::call('logout');
 });
 
 Route::get('/users/user', function(){
-    new View('user');
+    View::call('user');
 });
 
 Route::resource('/notFound', function(){
-    new View('notFound');
+    View::call('notFound');
 });
 

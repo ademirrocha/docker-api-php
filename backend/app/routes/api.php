@@ -1,5 +1,6 @@
 <?php
 
+use app\vendor\http\controllers\Controller;
 use app\vendor\routes\api\Route;
 
 /**
@@ -9,18 +10,19 @@ use app\vendor\routes\api\Route;
  */
 
 Route::post('/users/create', function(){
-    call_user_func("app\http\controllers\UserController::create");
+    Controller::call('UserController', 'create');
 });
 
 Route::get('/users', function(){
-    call_user_func("app\http\controllers\UserController::index");
+    Controller::call('UserController', 'index');
 });
 
 Route::get('/inmetro/pacs', function(){
+    Controller::call('UserController', 'pacs');
     call_user_func("app\http\controllers\PacsInmetroController::pacs");
 });
 
 Route::get('/inmetro/dados-pac', function(){
-    call_user_func("app\http\controllers\PacsInmetroController::dados_pac");
+    Controller::call('PacsInmetroController', 'dados_pac');
 });
 

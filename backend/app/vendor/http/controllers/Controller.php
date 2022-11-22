@@ -1,15 +1,21 @@
 <?php
 
-namespace app\http\controllers;
+namespace app\vendor\http\controllers;
 
-use app\http\requests\users\CreateRequest;
 use app\vendor\exceptions\ForbiddenException;
 use app\vendor\http\Request;
 use app\vendor\http\Response;
 use app\vendor\http\validator\FormValidator;
 
-class BaseController
+class Controller
 {
+
+
+
+    public static function call($controller, $method){
+        call_user_func(CONTROLLER_PATH."\\$controller::$method");
+    }
+
 
     public static function request(){
         return new Request();
@@ -36,5 +42,6 @@ class BaseController
         }
         return true;
     }
+
 
 }

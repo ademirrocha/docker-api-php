@@ -20,7 +20,7 @@ class CreateInmetroPortariaTable extends Migrate
             'DocumentoLegal' => ['string'],
             'DataPublicacaoDOU' => ['string'],
             'IDEscopo' => ['int'],
-            'DataVigenciaFabricacao' => ['string'],
+            'DataVigenciaFabricacao' => ['string']
         ]);
     }
 

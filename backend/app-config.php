@@ -7,6 +7,9 @@ function config(){
     define('DB_PASSWORD', 'root');
     define('DB_DATABASE', 'api_backend_db');
     define('DB_PORT', '3306');
+
+    define('CONTROLLER_PATH', "app\\http\\controllers");
+    define('VIEWS_PATH', "app/views");
 }
 
 config();

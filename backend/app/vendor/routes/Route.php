@@ -43,11 +43,10 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'GET') {
             self::resource($uri, $function);
-        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
+        } else if(self::getUri() === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request GET Only';
         }
-
     }
 
     /**
@@ -60,7 +59,7 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             self::resource($uri, $function);
-        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
+        } else if(self::getUri() === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request POST Only';
         }
@@ -77,7 +76,7 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'PUT'){
             self::resource($uri, $function);
-        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
+        } else if(self::getUri() === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request POST Only';
         }
@@ -94,7 +93,7 @@ class Route
     {
         if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
             self::resource($uri, $function);
-        } else if(rtrim($_SERVER['REQUEST_URI'], '/') === $uri) {
+        } else if(self::getUri() === $uri) {
             self::$error_method = true;
             echo 'Error: Method Request DELETE Only';
         }
@@ -164,6 +163,10 @@ class Route
 
         }
 
+    }
+
+    private static function getUri(){
+        return rtrim(explode('?', $_SERVER['REQUEST_URI'])[0], '/');
     }
 
 }

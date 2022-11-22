@@ -14,4 +14,11 @@ class User extends Model
         parent::__construct($this->tableName);
     }
 
+    protected array $fillable = [
+        'id',
+        'name',
+        'email',
+        'github'
+    ];
+
 }

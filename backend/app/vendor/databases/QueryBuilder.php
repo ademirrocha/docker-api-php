@@ -23,13 +23,13 @@ class QueryBuilder
      * For SELECT query
      * @var $selectQuery string
      */
-    public $selectQuery;
+    protected $selectQuery;
 
     /**
      * Final query
      * @var string $query
      */
-    public $query;
+    protected $query;
 
     /**
      * For WHERE query
@@ -88,6 +88,7 @@ class QueryBuilder
         }
 
         $this->tableName = $tableName;
+        $this->whereQuery = null;
     }
 
     /**

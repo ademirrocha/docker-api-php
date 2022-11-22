@@ -14,4 +14,11 @@ class Portarias extends Model
         parent::__construct($this->tableName);
     }
 
+    protected array $fillable = [
+        'DocumentoLegal',
+        'DataPublicacaoDOU',
+        'IDEscopo',
+        'DataVigenciaFabricacao'
+    ];
+
 }

@@ -14,4 +14,11 @@ class Pacs extends Model
         parent::__construct($this->tableName);
     }
 
+
+    protected array $fillable = [
+        'Codigo',
+        'Nome',
+        'Risco'
+    ];
+
 }

@@ -4,6 +4,9 @@ namespace app\models\inmetro;
 
 use app\vendor\models\Model;
 
+/**
+ * @property $Portarias
+ */
 class DadosPacs extends Model
 {
 
@@ -13,23 +16,32 @@ class DadosPacs extends Model
     {
         parent::__construct($this->tableName);
     }
+    
+    protected array $fillable = [
+        'ProdutosServicos',
+        'MecanismoAvaliacaoConformidade',
+        'Modelos',
+        'MarcaModeloouFamilia',
+        'risco',
+        'IPEM',
+        'Periodicidade',
+        'Portarias',
+        'Registro'
+    ];
 
-    public function get()
+    public function Portarias($args): array
     {
-        $portarias = parent::get();
-        $result = [];
-        foreach ($portarias as $portaria){
-            $ports = [];
-            foreach (explode('|', $portaria['Portarias']) as $port){
-                $dado = new Portarias();
-                $dado->where('DocumentoLegal', $port);
-                $result = current($dado->get());
-                $result['DataVigenciaFabricacao'] = json_decode($result['DataVigenciaFabricacao']);
-                $ports[] = $result;
+        $ports = [];
+        foreach (explode('|', $args->Portarias) as $port) {
+            $portaria = new Portarias();
+            $portaria->where('DocumentoLegal', $port);
+            $current = $portaria->get();
+            if (count($current)) {
+                $current = current($current);
+                $current->DataVigenciaFabricacao = json_decode($current->DataVigenciaFabricacao);
+                $ports[] = $current;
             }
-            $portaria['Portarias'] = $ports;
-            $result[] = $portaria;
         }
-        return $result;
+        return $ports;
     }
 }

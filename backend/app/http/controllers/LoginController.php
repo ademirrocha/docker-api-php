@@ -2,15 +2,14 @@
 
 namespace app\http\controllers;
 
-use app\vendor\databases\DB;
-use app\vendor\http\Response;
-use app\views\View;
+use app\vendor\http\controllers\Controller;
+use app\vendor\views\View;
 
-class LoginController extends BaseController
+class LoginController extends Controller
 {
 
     public static function login(){
-        new View('login', self::request()->all());
+        View::call('login', self::request()->all());
     }
 
 }

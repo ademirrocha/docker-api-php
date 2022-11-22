@@ -17,9 +17,9 @@ class CreateInmetroPacsTable extends Migrate
     {
         $table = new Table('inmetr_pacs');
         $table->create([
-            'codigo' => ['int'],
-            'nome' => ['string'],
-            'risco' => ['int'],
+            'Codigo' => ['int'],
+            'Nome' => ['string'],
+            'Risco' => ['int'],
         ]);
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-include "../index.php";
-
 use app\vendor\routes\Route;
 use app\vendor\routes\api\Route as RouteApi;
+
+include "../index.php";
 
 function startApp($useApi){
 
